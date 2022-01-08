@@ -1,5 +1,5 @@
 import express from "express";
-import mongoose from "mongoose";
+import connectDB from "./connectDB.js";
 import saleRouter from "./routers/saleRouter.js";
 import cors from "cors";
 //fake data
@@ -11,10 +11,7 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-mongoose.connect(process.env.MONGODB_URL, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+connectDB();
 
 app.use(cors());
 
