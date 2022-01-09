@@ -1,6 +1,6 @@
 import express from "express";
 import connectDB from "./connectDB.js";
-import saleRouter from "./routers/saleRouter.js";
+import saleRouter from "./routers/saleRouter/saleRouter.js";
 import cors from "cors";
 //fake data
 // import Sale from "./models/saleModel.js";
