@@ -1,6 +1,6 @@
 import express from "express";
-import codeRouter from "./codeRouter/codeRouter.js";
-import promotionRouter from "./promotionRouter/promotionRouter.js";
+import codeRouter from "./codeRouter.js";
+import promotionRouter from "./promotionRouter.js";
 
 const saleRouter = express.Router();
 

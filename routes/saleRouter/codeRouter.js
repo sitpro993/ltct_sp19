@@ -1,6 +1,6 @@
 import express from "express";
-import Code from "../../../models/codeModel.js";
-import Sale from "../../../models/saleModel.js";
+import Code from "../../models/codeModel.js";
+import Sale from "../../models/saleModel.js";
 
 const codeRouter = express.Router();
 
@@ -87,7 +87,7 @@ codeRouter.post("/create", async (req, res) => {
 //GET /api/sale/code/ lấy mã KM theo id
 codeRouter.get("/:id", async (req, res) => {
   try {
-    const code = await Sale.findById(req.params.id);
+    const code = await Code.findById(req.params.id);
     if (code) {
       res.send({ code });
     } else {

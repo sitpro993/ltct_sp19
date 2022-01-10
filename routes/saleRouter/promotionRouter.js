@@ -1,6 +1,6 @@
 import express from "express";
-import Code from "../../../models/codeModel.js";
-import Sale from "../../../models/saleModel.js";
+import Code from "../../models/codeModel.js";
+import Sale from "../../models/saleModel.js";
 
 const promotionRouter = express.Router();
 
@@ -130,6 +130,17 @@ promotionRouter.get("/trash", async (req, res) => {
   }
 });
 
+/**
+ * @swagger
+ * paths:
+ * /api/sale/promotion:
+ *  get:
+ *    description: lấy danh sách CTKM
+ *    responses:
+ *      '200':
+ *        description: OK
+ *
+ */
 //GET /api/sale/promotion/ lấy danh sách CTKM
 promotionRouter.get("/", async (req, res) => {
   try {
@@ -140,7 +151,7 @@ promotionRouter.get("/", async (req, res) => {
       ? req.query.sort
       : "asc";
     const sales = await Sale.find({ deleted: false }).sort([[column, sort]]);
-    res.send(sales);
+    res.status(200).send(sales);
   } catch (error) {
     res.status(500).send({ message: error.message });
   }
