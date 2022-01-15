@@ -3,7 +3,7 @@ import {
   getAllCodes,
   getTrashCodes,
   getCodeDetail,
-  createCode,
+  createCodeController,
   editCode,
   destroyCode,
 } from "../../controller/codeController.js";
@@ -16,18 +16,8 @@ codeRouter.patch("/edit/:id", editCode);
 //DELETE /api/sale/code/destroy xóa nhiều mã KM
 codeRouter.delete("/destroy", destroyCode);
 
-//DELETE /api/sale/code/destroy/:id Xóa vĩnh viễn 1 mã KM
-// codeRouter.delete("/destroy/:id", async (req, res) => {
-//   try {
-//     const data = await Code.findByIdAndDelete(req.params.id);
-//     res.status(200).send({ message: "Deleted 1 item", data });
-//   } catch (error) {
-//     res.status(500).send({ message: error.message });
-//   }
-// });
-
 //POST /api/sale/code/ Tạo 1 mã KM
-codeRouter.post("/create", createCode);
+codeRouter.post("/create", createCodeController);
 
 //GET /api/sale/code/ lấy mã KM theo id
 codeRouter.get("/:id", getCodeDetail);

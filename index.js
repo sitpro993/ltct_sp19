@@ -4,10 +4,7 @@ import saleRouter from "./routes/saleRouter/saleRouter.js";
 import cors from "cors";
 import swaggerJSDoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
-//fake data
-// import Sale from "./models/saleModel.js";
-// import Code from "./models/codeModel.js";
-// import { codes, sales } from "../sale.js";
+
 
 const app = express();
 app.use(express.json());
@@ -36,21 +33,6 @@ const swaggerDocs = swaggerJSDoc(swaggerOptions);
 app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 app.use("/api/sale", saleRouter);
-
-//insertmany module
-// app.post("/insertmany/sale", async (req, res) => {
-//   try {
-//     const insertMany = await Sale.insertMany(sales, function (error, docs) {});
-//     res.status(201).send({ message: "Created" });
-//   } catch (error) {}
-// });
-
-// app.post("/insertmany/code", async (req, res) => {
-//   try {
-//     const insertMany = await Code.insertMany(codes, function (error, docs) {});
-//     res.status(201).send({ message: "Created" });
-//   } catch (error) {}
-// });
 
 app.get("/", (req, res) => {
   res.send("This is server");

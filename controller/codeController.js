@@ -1,6 +1,8 @@
 import Code from "../models/codeModel.js";
 import Sale from "../models/saleModel.js";
-
+import { checkCode, checkSaleId } from "../utils/checkid/checkId.js";
+import { checkExists, validateCode } from "../utils/validate.js";
+import { handleValidateCode } from "../utils/validecode/valideCode.js";
 export const getAllCodes = async (req, res) => {
   try {
     const column = req.query.column || "name";
@@ -44,40 +46,43 @@ export const getCodeDetail = async (req, res) => {
   }
 };
 
-export const createCode = async (req, res) => {
+const createCode = async (req) => {
+  const code = new Code({
+    saleId: req.body.saleId,
+    name: req.body.name,
+    description: req.body.description,
+    count: req.body.count,
+    percentDiscount: req.body.percentDiscount,
+    cashDiscount: req.body.cashDiscount,
+    bundledProduct: req.body.bundledProduct,
+    level: req.body.level,
+    priceMin: req.body.priceMin,
+    totalProduct: req.body.totalProduct,
+    discountCode: req.body.discountCode,
+  });
+  const createCode = await code.save()
+  if (createCode) return -1
+  return 1
+}
+
+export const createCodeController = async (req, res) => {
   try {
-    const checkCode = await Code.findOne({
-      discountCode: req.body.discountCode,
-    });
-
-    const checkSaleId = await Sale.findOne({
-      _id: req.body.saleId,
-    });
-
-    if (checkCode) {
+    const checkCode = checkExists(req.body.discountCode, checkCode)
+    if (checkCode === -1)
       res.status(401).send({ messgae: "Discount code is exist" });
-    } else if (!checkSaleId) {
+
+    const checkSaleId = checkExists(req.body.saleId, checkSaleId)
+    if (checkSaleId === -1)
       res.status(401).send({ messgae: "SaleId is not exist" });
-    } else {
-      //check product exist
-      const code = new Code({
-        saleId: req.body.saleId,
-        name: req.body.name,
-        description: req.body.description,
-        count: req.body.count,
-        percentDiscount: req.body.percentDiscount,
-        cashDiscount: req.body.cashDiscount,
-        bundledProduct: req.body.bundledProduct,
-        level: req.body.level,
-        priceMin: req.body.priceMin,
-        totalProduct: req.body.totalProduct,
-        discountCode: req.body.discountCode,
-      });
-      const createCode = await code.save();
+
+    const codeStatus = validateCode(res.body)
+    if (codeStatus === -1)
+      res.status(401).send({ messgae: "Input data invlid" });
+    const status = createCode(req)
+    if (status === 1)
       res
         .status(201)
         .send({ message: "New code created", created: createCode });
-    }
   } catch (error) {
     res.status(500).send({ message: error.message });
   }
@@ -110,3 +115,5 @@ export const editCode = async (req, res) => {
     res.status(500).send({ message: error.message });
   }
 };
+
+
