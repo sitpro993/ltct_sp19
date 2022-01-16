@@ -73,7 +73,7 @@ const destroyCodeController = async (req, res) => {
       message:
         data.deletedCount > 1
           ? "Deleted 1 item"
-          : `Deleted ${data.deleteCount} items`,
+          : `Deleted ${data.deletedCount} items`,
       data,
     });
   } catch (error) {

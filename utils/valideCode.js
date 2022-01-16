@@ -1,4 +1,6 @@
 const handleValidateCode = (data) => {
+  if (data.name === null || data.name.length === 0) return -1;
+  if (data.discountCode === null || data.discountCode.length === 0) return -1;
   if (
     data.percentDiscount !== null &&
     (data.cashDiscount !== null || data.bundledProduct !== null)

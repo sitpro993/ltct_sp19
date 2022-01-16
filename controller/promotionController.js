@@ -92,9 +92,9 @@ const destroyPromotionController = async (req, res) => {
     const code = await codeDAO.destroyCode(req);
     res.status(200).send({
       message:
-        sale.deleteCount > 1
+        sale.deletedCount > 1
           ? "Deleted 1 promotion"
-          : `Deleted ${sale.deleteCount} promotion, ${code.deleteCount} code`,
+          : `Deleted ${sale.deletedCount} promotion, ${code.deletedCount} code`,
       sale,
       code,
     });
