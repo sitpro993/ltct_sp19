@@ -1,116 +1,111 @@
-import Code from "../models/codeModel.js";
-import Sale from "../models/saleModel.js";
-import { checkCode, checkSaleId } from "../utils/checkid/checkId.js";
-import { checkExists, validateCode } from "../utils/validate.js";
-import { handleValidateCode } from "../utils/validecode/valideCode.js";
-export const getAllCodes = async (req, res) => {
+import codeDAO from "../dao/codeDAO.js"
+import checkID from "../utils/checkId.js"
+import validate from "../utils/validate.js"
+import validateCode from "../utils/valideCode.js"
+const getAllCodesController = async (req, res) => {
   try {
-    const column = req.query.column || "name";
-    const sort = ["asc", "desc", "descending", "ascending", -1, 1].includes(
-      req.query.sort
-    )
-      ? req.query.sort
-      : "asc";
-    const codes = await Code.find({ deleted: false }).sort([[column, sort]]);
-    res.status(200).send(codes);
+    const codes = await codeDAO.getAllCodes(req)
+    res.status(200).send(codes)
   } catch (error) {
-    res.status(500).send({ message: error.message });
+    res.status(500).send({ message: error.message })
   }
-};
+}
 
-export const getTrashCodes = async (req, res) => {
+const getTrashCodesController = async (req, res) => {
   try {
-    const column = req.query.column || "discountCode";
-    const sort = ["asc", "desc", "descending", "ascending", -1, 1].includes(
-      req.query.sort
-    )
-      ? req.query.sort
-      : "asc";
-    const codes = await Code.find({ deleted: true }).sort([[column, sort]]);
-    res.status(200).send(codes);
+    const codes = await codeDAO.getTrashCodes(req)
+    res.status(200).send(codes)
   } catch (error) {
-    res.status(500).send({ message: error.message });
+    res.status(500).send({ message: error.message })
   }
-};
+}
 
-export const getCodeDetail = async (req, res) => {
+const getCodeDetailController = async (req, res) => {
   try {
-    const code = await Code.findById(req.params.id);
+    const code = await codeDAO.getCodeDetail(req)
     if (code) {
-      res.send({ code });
+      res.send({ code })
     } else {
-      res.status(404).send({ message: "code not found" });
+      res.status(404).send({ message: "code not found" })
     }
   } catch (error) {
-    res.status(500).send({ message: error.message });
+    res.status(500).send({ message: error.message })
   }
-};
+}
 
-const createCode = async (req) => {
-  const code = new Code({
-    saleId: req.body.saleId,
-    name: req.body.name,
-    description: req.body.description,
-    count: req.body.count,
-    percentDiscount: req.body.percentDiscount,
-    cashDiscount: req.body.cashDiscount,
-    bundledProduct: req.body.bundledProduct,
-    level: req.body.level,
-    priceMin: req.body.priceMin,
-    totalProduct: req.body.totalProduct,
-    discountCode: req.body.discountCode,
-  });
-  const createCode = await code.save();
-  if (!createCode) return -1;
-  return 1;
-};
 
-export const createCodeController = async (req, res) => {
+const createCodeController = async (req, res) => {
   try {
-    const checkCodeStatus = await checkExists(req.body.discountCode, checkCode);
+    let checkCodeStatus = -1
+    let checkSaleStatus = -1
+    let codeStatus = -1
+    let status = -1
+    await validate.checkExists(req.body.discountCode, checkID.checkCode).then(
+      result => checkCodeStatus = result
+    )
     if (checkCodeStatus === -1)
-      res.status(401).send({ messgae: "Discount code is exist" });
+      res.status(401).send({ messgae: "Discount code is exist" })
 
-    const checkSaleStatus = await checkExists(req.body.saleId, checkSaleId);
+
+    await validate.checkExists(req.body.saleId, checkID.checkSale).then(
+      result => checkSaleStatus = result
+    )
     if (checkSaleStatus === -1)
-      res.status(401).send({ messgae: "SaleId is not exist" });
-    const codeStatus = await validateCode(req.body, handleValidateCode);
-    console.log("status: " + codeStatus);
-    if (codeStatus === 1) {
-      console.log(req.body);
-    }
-    res.status(401).send({ messgae: codeStatus });
-    // const status = createCode(req);
-    // if (status === 1) res.status(201).send({ message: "New code created" });
-  } catch (error) {
-    res.status(500).send({ message: error.message });
-  }
-};
+      res.status(401).send({ messgae: "SaleId is not exist" })
 
-export const destroyCode = async (req, res) => {
+
+    await validate.validateCode(req.body, validateCode.handleValidateCode).then(
+      result => codeStatus = result
+    )
+    if (codeStatus === -1)
+      res.status(401).send({ messgae: "Input data invalid" })
+
+
+    await codeDAO.createCode(req).then(
+      result => status = result
+    )
+    if (status === -1)
+      res.status(401).send({ messgae: "Can't create new code" })
+
+
+    res.status(201).send({ message: "New code created" })
+  } catch (error) {
+    res.status(500).send({ message: error.message })
+  }
+}
+
+const destroyCodeController = async (req, res) => {
   try {
-    const data = await Code.deleteMany({
-      _id: { $in: req.body.codeIds },
-    });
+    const data = await codeDAO.destroyCode(req)
     res.status(200).send({
       message:
         data.deleteCount > 1
           ? "Deleted 1 item"
           : `Deleted ${data.deleteCount} items`,
       data,
-    });
+    })
   } catch (error) {
-    res.status(500).send({ message: error.message });
+    res.status(500).send({ message: error.message })
   }
-};
+}
 
-export const editCode = async (req, res) => {
+const editCodeController = async (req, res) => {
   try {
-    const data = await Code.findOneAndUpdate({ _id: req.params.id }, req.body, {
-      new: true,
-    });
-    res.status(200).send({ message: "Updated Code", data });
+    // viết thêm hàm valide cho edit code 
+    const data = await codeDAO.editCode(req)
+    res.status(200).send({ message: "Updated Code", data })
   } catch (error) {
-    res.status(500).send({ message: error.message });
+    res.status(500).send({ message: error.message })
   }
-};
+}
+
+const codeControllerDefault = {
+  getAllCodesController,
+  getTrashCodesController,
+  getCodeDetailController,
+  createCodeController,
+  editCodeController,
+  destroyCodeController
+}
+
+export default codeControllerDefault

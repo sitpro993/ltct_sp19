@@ -35,6 +35,9 @@ const codeSchema = new mongoose.Schema(
   {
     timestamps: true,
   }
-);
-const Code = mongoose.model("Code", codeSchema);
-export default Code;
+)
+const Code = mongoose.model("Code", codeSchema)
+
+export default Code
+
+
