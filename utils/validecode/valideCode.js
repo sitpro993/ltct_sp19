@@ -4,14 +4,12 @@ export const handleValidateCode = (data) => {
   if ((data.count !== undefined || data.count !== null) && data.count <= 0)
     return "Count is positive numbers";
   if (
-    (data.percentDiscount === null &&
-      data.cashDiscount === null &&
-      data.bundledProduct === null) ||
-    (data.percentDiscount === undefined &&
-      data.cashDiscount === undefined &&
-      data.bundledProduct === undefined)
-  )
-    return "percentDiscount or cashDiscount or bundledProduct is fill";
+    (data.percentDiscount && !data.cashDiscount && !data.bundledProduct) ||
+    (!data.percentDiscount && data.cashDiscount && !data.bundledProduct) ||
+    (!data.percentDiscount && !data.cashDiscount && data.bundledProduct)
+  ) {
+  }
+  return "percentDiscount or cashDiscount or bundledProduct is fill";
 
   if (data.level !== null && (data.level < 1 || data.level > 3))
     return "Level is 1 or 2 or 3";
