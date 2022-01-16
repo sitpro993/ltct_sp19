@@ -2,10 +2,10 @@ import mongoose from "mongoose";
 
 const saleSchema = new mongoose.Schema(
   {
-    name: { type: String, required: true },
+    name: { type: String, required: [true, "Name is required"] },
     description: { type: String },
-    timeStart: { type: Date, required: true },
-    timeEnd: { type: Date, required: true },
+    timeStart: { type: Date, required: [true, "Time start is required"] },
+    timeEnd: { type: Date, required: [true, "Time end is required"] },
     images: { type: Array },
     deleted: { type: Boolean, default: false },
     isActived: { type: Boolean, default: false },

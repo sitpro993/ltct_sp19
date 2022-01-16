@@ -26,7 +26,7 @@ const codeSchema = new mongoose.Schema(
     discountCode: {
       type: String,
       required: [true, "discountCode is required"],
-      unique: true,
+      unique: [true, "{VALUE} is exist"],
     },
     deleted: { type: Boolean, default: false },
     isActived: { type: Boolean, default: false },
@@ -35,9 +35,7 @@ const codeSchema = new mongoose.Schema(
   {
     timestamps: true,
   }
-)
-const Code = mongoose.model("Code", codeSchema)
+);
+const Code = mongoose.model("Code", codeSchema);
 
-export default Code
-
-
+export default Code;

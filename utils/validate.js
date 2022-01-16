@@ -1,25 +1,20 @@
 const validateCode = async (dataCode, handeValidateCode) => {
-  let status = -1
-  await handeValidateCode(dataCode).then(result => status = result)
-  return status
-}
+  const status = await handeValidateCode(dataCode);
+  return status;
+};
 const validateSale = async (dataSale, handlValidateSale) => {
-  let status = -1
-  await handlValidateSale(dataSale).then(result => status = result)
-  return status
-}
+  const status = await handlValidateSale(dataSale);
+  return status;
+};
 const checkExists = async (id, handleCheckExists) => {
-  let status = -1
-  await handleCheckExists(id).then(result => status = result)
-  return status
-}
-
+  const status = await handleCheckExists(id);
+  return status;
+};
 
 const valideDefault = {
   validateCode,
   validateSale,
-  checkExists
-}
+  checkExists,
+};
 
-export default valideDefault
-
+export default valideDefault;
