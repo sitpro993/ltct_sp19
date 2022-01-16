@@ -1,5 +1,6 @@
 import Code from "../models/codeModel.js"
 import Sale from "../models/saleModel.js"
+
 const checkCode = async (data) => {
   var checkCode = null
   await Code.findOne({
@@ -8,6 +9,7 @@ const checkCode = async (data) => {
   if (checkCode) return -1
   return 1
 }
+
 const checkSale = async (data) => {
   var check = null
   await Sale.findOne({
@@ -16,6 +18,7 @@ const checkSale = async (data) => {
   if (!check) return -1
   return 1
 }
+
 
 const checkIdDefault = {
   checkCode,
