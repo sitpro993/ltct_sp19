@@ -1,10 +1,24 @@
 export const handleValidateCode = (data) => {
-    if (data.name === undefined || data.name == null || data.name.length) return -1
-    if (data.description === undefined || data.description == null || data.description.length) return -1
-    if (data.count === undefined || data.count == null || data.count <= 0) return -1
-    if ((data.percentDiscount === null && data.cashDiscount === null && data.discountCode === null) || (data.percentDiscount === undefined && data.cashDiscount === undefined && data.discountCode === undefined)) return -1
-    if (data.level < 1 || data.level > 3) return -1
-    if (data.priceMin <= 0) return -1
+  if (data.name === undefined || data.name == null || data.name.length === 0)
+    return "Name is required";
+  if ((data.count !== undefined || data.count !== null) && data.count <= 0)
+    return "Count is positive numbers";
+  if (
+    (data.percentDiscount === null &&
+      data.cashDiscount === null &&
+      data.bundledProduct === null) ||
+    (data.percentDiscount === undefined &&
+      data.cashDiscount === undefined &&
+      data.bundledProduct === undefined)
+  )
+    return "percentDiscount or cashDiscount or bundledProduct is fill";
 
-    return 1
-}
+  if (data.level !== null && (data.level < 1 || data.level > 3))
+    return "Level is 1 or 2 or 3";
+  if (data.priceMin === null && data.totalProduct === null) {
+    return "priceMin or totalProduct is fill";
+  }
+  if (data.priceMin <= 0) return "priceMin positive numbers";
+
+  return 1;
+};

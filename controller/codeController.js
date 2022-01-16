@@ -60,29 +60,28 @@ const createCode = async (req) => {
     totalProduct: req.body.totalProduct,
     discountCode: req.body.discountCode,
   });
-  const createCode = await code.save()
-  if (createCode) return -1
-  return 1
-}
+  const createCode = await code.save();
+  if (!createCode) return -1;
+  return 1;
+};
 
 export const createCodeController = async (req, res) => {
   try {
-    const checkCode = checkExists(req.body.discountCode, checkCode)
-    if (checkCode === -1)
+    const checkCodeStatus = await checkExists(req.body.discountCode, checkCode);
+    if (checkCodeStatus === -1)
       res.status(401).send({ messgae: "Discount code is exist" });
 
-    const checkSaleId = checkExists(req.body.saleId, checkSaleId)
-    if (checkSaleId === -1)
+    const checkSaleStatus = await checkExists(req.body.saleId, checkSaleId);
+    if (checkSaleStatus === -1)
       res.status(401).send({ messgae: "SaleId is not exist" });
-
-    const codeStatus = validateCode(res.body)
-    if (codeStatus === -1)
-      res.status(401).send({ messgae: "Input data invlid" });
-    const status = createCode(req)
-    if (status === 1)
-      res
-        .status(201)
-        .send({ message: "New code created", created: createCode });
+    const codeStatus = await validateCode(req.body, handleValidateCode);
+    console.log("status: " + codeStatus);
+    if (codeStatus === 1) {
+      console.log(req.body);
+    }
+    res.status(401).send({ messgae: codeStatus });
+    // const status = createCode(req);
+    // if (status === 1) res.status(201).send({ message: "New code created" });
   } catch (error) {
     res.status(500).send({ message: error.message });
   }
@@ -115,5 +114,3 @@ export const editCode = async (req, res) => {
     res.status(500).send({ message: error.message });
   }
 };
-
-
