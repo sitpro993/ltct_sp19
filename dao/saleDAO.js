@@ -9,7 +9,7 @@ const getTrashSaleAndSort = async (params) => {
 };
 
 const getSaleByID = async (id) => {
-  return await Sale.findById(req.params.id);
+  return await Sale.findById(id);
 };
 
 const createSale = async (req) => {
