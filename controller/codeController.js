@@ -83,14 +83,16 @@ const destroyCodeController = async (req, res) => {
 
 const editCodeController = async (req, res) => {
   try {
-    const checkSaleStatus = await validate.checkExists(
-      req.body.saleId,
-      checkID.checkSale
-    );
+    if (req.body.saleId !== undefined) {
+      const checkSaleStatus = await validate.checkExists(
+        req.body.saleId,
+        checkID.checkSale
+      );
 
-    if (checkSaleStatus === -1) {
-      res.status(401).send({ messgae: "SaleId is not exist" });
-      return;
+      if (checkSaleStatus === -1) {
+        res.status(401).send({ messgae: "SaleId is not exist" });
+        return;
+      }
     }
 
     const codeStatus = await validate.validateCode(
