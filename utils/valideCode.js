@@ -9,7 +9,20 @@ const handleValidateCode = (data) => {
   )
     return -1;
 
-  if (data.discountType === 1 && typeof data.subConditions !== "number")
+  if (
+    data.discountValue === null ||
+    data.discountValue === undefined ||
+    typeof data.discountValue !== "number" ||
+    data.discountValue < 0
+  )
+    return -1;
+
+  if (
+    data.discountType === 1 &&
+    (typeof data.subConditions !== "number" ||
+      data.discountValue <= 0 ||
+      data.discountValue > 100)
+  )
     return -1;
 
   if (
@@ -21,7 +34,7 @@ const handleValidateCode = (data) => {
   if (
     data.conditionType === null ||
     data.conditionType === undefined ||
-    data.discouconditionTypentValue <= 0
+    data.conditionType <= 0
   )
     return -1;
 

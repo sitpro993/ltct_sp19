@@ -4,7 +4,11 @@ const codeSchema = new mongoose.Schema(
   {
     name: { type: String, required: [true, "Name is required"] },
     description: { type: String },
-    count: { type: Number, min: [0, "Count is positive numbers"] },
+    count: {
+      type: Number,
+      required: true,
+      min: [0, "Count is positive numbers"],
+    },
     usedQty: {
       type: Number,
       default: 0,
@@ -16,7 +20,7 @@ const codeSchema = new mongoose.Schema(
       subConditions: { type: Number, default: null }, //nếu giảm giá theo phần trăm trường này hiển thị giá trị được giảm tối đa{có thể không nhập}
     },
     condition: {
-      conditionType: { type: Number, required: true },//1: priceMin, 2: totalProduct
+      conditionType: { type: Number, required: true }, //1: priceMin, 2: totalProduct
       conditionValue: { type: Number, required: true },
     },
     discountCode: {
