@@ -1,18 +1,21 @@
 import Code from "../models/codeModel.js";
 
-const createCode = async (req) => {
+const createCode = async (data) => {
   const code = new Code({
-    saleId: req.body.saleId,
-    name: req.body.name,
-    description: req.body.description,
-    count: req.body.count,
-    percentDiscount: req.body.percentDiscount,
-    cashDiscount: req.body.cashDiscount,
-    bundledProduct: req.body.bundledProduct,
-    level: req.body.level,
-    priceMin: req.body.priceMin,
-    totalProduct: req.body.totalProduct,
-    discountCode: req.body.discountCode,
+    name: data.name,
+    description: data.description,
+    count: Math.floor(data.count),
+    discount: {
+      discountType: Math.floor(data.discountType),
+      discountValue: Math.floor(data.discountValue),
+      subConditions: data.subConditions,
+    },
+    condition: {
+      conditionType: Math.floor(data.conditionType),
+      conditionValue: Math.floor(data.conditionValue),
+    },
+    discountCode: data.discountCode,
+    isActived: typeof data.isActived === "boolean" ? data.isActived : false,
   });
   const createCode = await code.save();
   if (!createCode) return -1;
@@ -43,16 +46,35 @@ const getCodeDetail = async (req) => {
   return await Code.findById(req.params.id);
 };
 
-const destroyCode = async (req) => {
+const destroyCode = async (data) => {
   return await Code.deleteMany({
-    _id: { $in: req.body.codeIds },
+    _id: { $in: data.codeIds },
   });
 };
 
-const editCode = async (req) => {
-  return await Code.findOneAndUpdate({ _id: req.params.id }, req.body, {
-    new: true,
-  });
+const editCode = async (data) => {
+  return await Code.findOneAndUpdate(
+    { _id: data.id },
+    {
+      name: data.name,
+      description: data.description,
+      count: Math.floor(data.count),
+      discount: {
+        discountType: Math.floor(data.discountType),
+        discountValue: Math.floor(data.discountValue),
+        subConditions: data.subConditions,
+      },
+      condition: {
+        conditionType: Math.floor(data.conditionType),
+        conditionValue: Math.floor(data.conditionValue),
+      },
+      discountCode: data.discountCode,
+      isActived: typeof data.isActived === "boolean" ? data.isActived : false,
+    },
+    {
+      new: true,
+    }
+  );
 };
 
 const getCodeByID = async (id) => {
@@ -61,19 +83,76 @@ const getCodeByID = async (id) => {
 
 const updateCodeMany = async (req) => {
   return await Code.updateMany(
-    { saleId: { $in: req.body.saleIds } },
+    { saleId: { $in: data.saleIds } },
     { deleted: true, deletedAt: new Date() }
   );
 };
-// const updateCodeMany = async (req) => {
-//     await Code.updateMany(
-//         { saleId: { $in: req.body.saleIds } },
-//         { deleted: true, deletedAt: new Date() },
-//         {
-//             new: true,
-//           }
-//     )
-// }
+
+const deleteCode = async (data) => {
+  return await Code.updateMany(
+    { _id: { $in: data.codeIds } },
+    { deleted: true, deletedAt: new Date() }
+  );
+};
+const restoreCode = async (data) => {
+  return await Code.updateMany(
+    { _id: { $in: data.codeIds } },
+    { deleted: false, deletedAt: null }
+  );
+};
+
+const getAllCodesUser = async () => {
+  return await Code.find({
+    deleted: false,
+    isActived: true,
+  }).select([
+    "discount",
+    "condition",
+    "name",
+    "description",
+    "_id",
+    "count",
+    "usedQty",
+    "discountCode",
+  ]);
+};
+
+const getCodeByCode = async (code) => {
+  return await Code.findOne({
+    discountCode: code,
+    deleted: false,
+    isActived: true,
+  }).select(["discount", "condition", "name", "description", "_id"]);
+};
+
+const updateCountCode = async (id) => {
+  const code = await Code.findById(id);
+  if (!code) {
+    return -1;
+  }
+  return await Code.findOneAndUpdate(
+    { _id: id },
+    { usedQty: code.usedQty + 1 }
+  );
+};
+
+const getUsedQty = async (id) => {
+  console.log(id);
+  return await Code.findOne({
+    _id: id,
+    deleted: false,
+    isActived: true,
+  }).select([
+    "discount",
+    "condition",
+    "name",
+    "description",
+    "_id",
+    "count",
+    "usedQty",
+    "discountCode",
+  ]);
+};
 
 const codeDAODefault = {
   createCode,
@@ -84,5 +163,11 @@ const codeDAODefault = {
   editCode,
   getCodeByID,
   updateCodeMany,
+  getCodeByCode,
+  deleteCode,
+  restoreCode,
+  updateCountCode,
+  getAllCodesUser,
+  getUsedQty,
 };
 export default codeDAODefault;

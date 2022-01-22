@@ -1,10 +1,9 @@
 import express from "express";
 import connectDB from "./connectDB.js";
-import saleRouter from "./routes/saleRouter/saleRouter.js";
+import saleRouter from "./routes/saleRouter.js";
 import cors from "cors";
 import swaggerJSDoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
-
 
 const app = express();
 app.use(express.json());

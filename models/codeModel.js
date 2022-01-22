@@ -2,7 +2,6 @@ import mongoose from "mongoose";
 
 const codeSchema = new mongoose.Schema(
   {
-    saleId: { type: String, required: [true, "SaleId is required"] },
     name: { type: String, required: [true, "Name is required"] },
     description: { type: String },
     count: { type: Number, min: [0, "Count is positive numbers"] },
@@ -11,18 +10,15 @@ const codeSchema = new mongoose.Schema(
       default: 0,
       min: [0, "usedQty is positive numbers"],
     },
-    images: { type: Array },
-    percentDiscount: { type: Number, default: null },
-    cashDiscount: { type: Number, default: null },
-    bundledProduct: { type: String, default: null },
-    level: {
-      type: String,
-      default: 1,
-      min: [1, "Level is 1 or 2 or 3"],
-      max: [3, "Level is 1 or 2 or 3"],
+    discount: {
+      discountType: { type: Number, required: true }, //1: giảm giá phần trăm, 2:Giảm giá theo tiền
+      discountValue: { type: Number, required: true },
+      subConditions: { type: Number, default: null }, //nếu giảm giá theo phần trăm trường này hiển thị giá trị được giảm tối đa{có thể không nhập}
     },
-    priceMin: { type: Number, default: null },
-    totalProduct: { type: Number, default: null },
+    condition: {
+      conditionType: { type: Number, required: true },//1: priceMin, 2: totalProduct
+      conditionValue: { type: Number, required: true },
+    },
     discountCode: {
       type: String,
       required: [true, "discountCode is required"],
