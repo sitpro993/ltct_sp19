@@ -5,7 +5,8 @@ const handleValidateCode = (data) => {
     data.discountType === null ||
     data.discountType === undefined ||
     data.discountType < 1 ||
-    data.discountType > 3
+    data.discountType > 3 ||
+    typeof data.discountValue !== "number"
   )
     return -1;
 

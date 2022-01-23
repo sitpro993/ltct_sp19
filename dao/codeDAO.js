@@ -126,7 +126,7 @@ const getCodeByCode = async (code) => {
 };
 
 const updateCountCode = async (id) => {
-  const code = await Code.findById(id);
+  const code = await Code.findOne({ _id: id, isActived: true, deleted: false });
   if (!code) {
     return -1;
   }

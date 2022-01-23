@@ -1,14 +1,6 @@
-import Code from "../models/codeModel.js";
-import Sale from "../models/saleModel.js";
 import mongoose from "mongoose";
-
-const checkCode = async (data) => {
-  const checkCode = await Code.findOne({
-    discountCode: data,
-  });
-  if (checkCode) return -1;
-  return 1;
-};
+import Promotion from "../models/promotionModel.js";
+import axios from "axios";
 
 const checkValidateIds = async (data) => {
   const objectId = mongoose.Types.ObjectId;
@@ -28,18 +20,31 @@ const checkValidateId = async (id) => {
   return 1;
 };
 
-const checkSale = async (data) => {
-  const check = await Sale.findOne({
-    _id: data,
+const checkExistsApplyProductId = async (data) => {
+  const promotion = Promotion.findOne({
+    isActived: true,
+    deleted: false,
+    "applyProduct.applyProductType": data.applyProduct.applyProductType,
+    "applyProduct.applyProductId": { $in: data.applyProduct.applyProductId },
   });
-  if (!check) return -1;
+  if (promotion) return -1;
   return 1;
 };
 
+const checkExistsID = async (id, type) => {
+  const url =
+    type === 1
+      ? "https://team-product-api.herokuapp.com/api/categories/"
+      : "https://team-product-api.herokuapp.com/api/products/";
+  const { data } = await axios.get(url + id);
+  if (!data) return -1;
+  return 1;
+};
 const checkIdDefault = {
-  checkCode,
-  checkSale,
   checkValidateIds,
   checkValidateId,
+  checkExistsApplyProductId,
+  checkExistsID,
 };
+
 export default checkIdDefault;

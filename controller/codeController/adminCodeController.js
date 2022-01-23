@@ -6,16 +6,16 @@ import validateCode from "../../utils/valideCode.js";
 const getAllCodesController = async (req, res) => {
   try {
     const codes = await codeDAO.getAllCodes(req);
-    res.status(200).send({data:codes});
+    res.status(200).send({ data: codes });
   } catch (error) {
     res.status(500).send({ error: error.message });
   }
-}
+};
 
 const getTrashCodesController = async (req, res) => {
   try {
     const codes = await codeDAO.getTrashCodes(req);
-    res.status(200).send(codes);
+    res.status(200).send({ data: codes });
   } catch (error) {
     res.status(500).send({ message: error.message });
   }
@@ -23,14 +23,17 @@ const getTrashCodesController = async (req, res) => {
 
 const getCodeDetailController = async (req, res) => {
   try {
-    const status = await validate.validateCode(req.params.id, checkID.checkValidateId);
+    const status = await validate.validateCode(
+      req.params.id,
+      checkID.checkValidateId
+    );
     if (status === -1) {
       res.status(401).send({ error: "Invalid id" });
       return;
     }
     const code = await codeDAO.getCodeDetail(req);
     if (code) {
-      res.send({data: code });
+      res.send({ data: code });
     } else {
       res.status(404).send({ error: "code not found" });
     }
@@ -66,7 +69,10 @@ const createCodeController = async (req, res) => {
 //done
 const destroyCodeController = async (req, res) => {
   try {
-    const status = await validate.validateCode(req.body.codeIds, checkID.checkValidateIds);
+    const status = await validate.validateCode(
+      req.body.codeIds,
+      checkID.checkValidateIds
+    );
     if (status === -1) {
       res.status(401).send({ error: "Invalid id" });
       return;
@@ -86,8 +92,10 @@ const destroyCodeController = async (req, res) => {
 
 const editCodeController = async (req, res) => {
   try {
-
-    const status = await validate.validateCode(req.body.id, checkID.checkValidateId);
+    const status = await validate.validateCode(
+      req.body.id,
+      checkID.checkValidateId
+    );
     if (status === -1) {
       res.status(401).send({ error: "Invalid id" });
       return;
@@ -102,7 +110,7 @@ const editCodeController = async (req, res) => {
     }
 
     const data = await codeDAO.editCode(req.body);
-    res.status(200).send({ success: "Updated Code", data });
+    res.status(200).send({ success: "Updated Code",data: data });
   } catch (error) {
     res.status(500).send({ error: error.message });
   }
@@ -110,7 +118,10 @@ const editCodeController = async (req, res) => {
 
 //done
 const restoreCodeController = async (req, res) => {
-  const status = await validate.validateCode(req.body.codeIds, checkID.checkValidateIds);
+  const status = await validate.validateCode(
+    req.body.codeIds,
+    checkID.checkValidateIds
+  );
   if (status === -1) {
     res.status(401).send({ error: "Invalid id" });
     return;
@@ -121,7 +132,10 @@ const restoreCodeController = async (req, res) => {
 
 //done
 const deleteCodeController = async (req, res) => {
-  const status = await validate.validateCode(req.body.codeIds, checkID.checkValidateIds);
+  const status = await validate.validateCode(
+    req.body.codeIds,
+    checkID.checkValidateIds
+  );
   if (status === -1) {
     res.status(401).send({ error: "Invalid id" });
     return;

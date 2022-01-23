@@ -2,8 +2,8 @@ const validateCode = async (dataCode, handeValidateCode) => {
   const status = await handeValidateCode(dataCode);
   return status;
 };
-const validateSale = async (dataSale, handlValidateSale) => {
-  const status = await handlValidateSale(dataSale);
+const validatePromotion = async (dataPromotion, handlValidatePromotion) => {
+  const status = await handlValidatePromotion(dataPromotion);
   return status;
 };
 const checkExists = async (id, handleCheckExists) => {
@@ -13,7 +13,7 @@ const checkExists = async (id, handleCheckExists) => {
 
 const valideDefault = {
   validateCode,
-  validateSale,
+  validatePromotion,
   checkExists,
 };
 
