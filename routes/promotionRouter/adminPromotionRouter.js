@@ -32,16 +32,22 @@ adminPromotionRouter.post(
   adminPromotionController.createPromotionController
 );
 
-//GET /api/sale/promotion/:id Lấy 1 Promotion theo id
-adminPromotionRouter.get("/:id", adminPromotionController.getPromotionDetailController);
-
 //GET /api/sale/promotion/trash lấy danh sách Promotion trong thùng rác
 adminPromotionRouter.get(
   "/trash",
   adminPromotionController.getTrashPromotionsController
 );
 
+//GET /api/sale/promotion/:id Lấy 1 Promotion theo id
+adminPromotionRouter.get(
+  "/:id",
+  adminPromotionController.getPromotionDetailController
+);
+
 //GET /api/sale/promotion/ lấy danh sách Promotion
-adminPromotionRouter.get("/", adminPromotionController.getAllPromotionsController);
+adminPromotionRouter.get(
+  "/",
+  adminPromotionController.getAllPromotionsController
+);
 
 export default adminPromotionRouter;
