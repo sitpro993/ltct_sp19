@@ -31,7 +31,7 @@ const createPromotion = async (data) => {
 
     discount: {
       discountType: data.discountType,
-      discountValue: data.discountType,
+      discountValue: data.discountValue,
     },
     applyProduct: {
       applyProductType: data.applyProductType,
@@ -71,7 +71,7 @@ const updatePromotionOne = async (data) => {
 
       discount: {
         discountType: data.discountType,
-        discountValue: data.discountType,
+        discountValue: data.discountValue,
       },
       applyProduct: {
         applyProductType: data.applyProductType,
