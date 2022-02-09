@@ -86,7 +86,7 @@ const destroyCodeController = async (req, res) => {
       data,
     });
   } catch (error) {
-    res.status(500).send({ message: error.message });
+    res.status(500).send({ error: error.message });
   }
 };
 
@@ -110,7 +110,7 @@ const editCodeController = async (req, res) => {
     }
 
     const data = await codeDAO.editCode(req.body);
-    res.status(200).send({ success: "Updated Code",data: data });
+    res.status(200).send({ success: "Updated Code", data: data });
   } catch (error) {
     res.status(500).send({ error: error.message });
   }

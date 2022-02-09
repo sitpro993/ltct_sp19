@@ -17,7 +17,7 @@ const getTrashPromotionsController = async (req, res) => {
     const Promotions = await promotionDAO.getTrashPromotionAndSort(req);
     res.status(200).send({ data: Promotions });
   } catch (error) {
-    res.status(500).send({ arror: error.message });
+    res.status(500).send({ error: error.message });
   }
 };
 
@@ -39,7 +39,7 @@ const getPromotionDetailController = async (req, res) => {
 };
 const tmp = async (id, type) => {
   const status = await checkID.checkExistsID(id, type);
-  console.log(status);
+
   if (status === -1) {
     res.status(404).send({
       error: `${
@@ -66,7 +66,6 @@ const createPromotionController = async (req, res) => {
     for (let id of req.body.applyProductId) {
       await tmp(id, req.body.applyProductType);
     }
-
 
     //check tồn tại của category
 
@@ -155,14 +154,14 @@ const editPromotionController = async (req, res) => {
       validatePromotionDefault.handleValidatePrompotion
     );
     if (promotionStatus === -1) {
-      res.status(401).send({ messgae: "Input data invalid" });
+      res.status(401).send({ error: "Input data invalid" });
       return;
     }
     //check id category
     const data = await promotionDAO.updatePromotionOne(req.body);
-    res.status(200).send({ message: "Updated Promotion", data });
+    res.status(200).send({ success: "Updated Promotion", data });
   } catch (error) {
-    res.status(500).send({ message: error.message });
+    res.status(500).send({ error: error.message });
   }
 };
 

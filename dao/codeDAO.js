@@ -137,7 +137,6 @@ const updateCountCode = async (id) => {
 };
 
 const getUsedQty = async (id) => {
-  console.log(id);
   return await Code.findOne({
     _id: id,
     deleted: false,

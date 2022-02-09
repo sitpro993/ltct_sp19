@@ -1,6 +1,7 @@
 const handleValidateCode = (data) => {
   if (data.name === null || data.name.length === 0 || data.name === undefined)
     return -1;
+  console.log(1);
   if (
     data.discountType === null ||
     data.discountType === undefined ||
@@ -9,6 +10,7 @@ const handleValidateCode = (data) => {
     typeof data.discountValue !== "number"
   )
     return -1;
+  console.log(2);
 
   if (
     data.discountValue === null ||
@@ -17,6 +19,7 @@ const handleValidateCode = (data) => {
     data.discountValue < 0
   )
     return -1;
+  console.log(3);
 
   if (
     data.discountType === 1 &&
@@ -25,12 +28,10 @@ const handleValidateCode = (data) => {
       data.discountValue > 100)
   )
     return -1;
+  console.log(4);
 
-  if (
-    data.discountType === 2 &&
-    (data.subConditions !== null || data.subConditions !== undefined)
-  )
-    return -1;
+  if (data.discountType === 2 && data.subConditions !== -1) return -1;
+  console.log(5);
 
   if (
     data.conditionType === null ||
@@ -38,9 +39,11 @@ const handleValidateCode = (data) => {
     data.conditionType <= 0
   )
     return -1;
+  console.log(6);
 
   if (data.count === null || data.count === undefined || data.count < 1)
     return -1;
+  console.log(7);
 
   if (
     data.conditionType === null ||
@@ -49,12 +52,14 @@ const handleValidateCode = (data) => {
     data.conditionType > 3
   )
     return -1;
+  console.log(8);
   if (
     data.conditionValue === null ||
     data.conditionValue === undefined ||
     data.conditionValue < 0
   )
     return -1;
+  console.log(9);
 
   return 1;
 };

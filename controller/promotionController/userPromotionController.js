@@ -1,7 +1,4 @@
 import promotionDAO from "../../dao/promotionDAO.js";
-import checkID from "../../utils/checkId.js";
-import validate from "../../utils/validate.js";
-import validatePromotionDefault from "../../utils/validatePromotion.js";
 
 const getPromotionByCategoryIdController = async (req, res) => {
   try {
